@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link th:href="@{/css/login.css}" rel='stylesheet' type='text/css'/>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.md5.js}"></script>
+    <script th:src="@{/js/sea.js}"></script>
+</head>
+<body>
+<div class="hided"></div>
+<div class="app-location">
+    <h2>请登录</h2>
+    <form>
+        <input class="text" type="text" value="Student ID"/>
+        <input type="password" value="Password"/>
+        <input type="hidden" id="random-string" value="${randomString}"/>
+        <div class="submit"><input type="submit" id="btn-login" value="登录"/></div>
+        <div class="clear"></div>
+        <div class="new">
+            <h3><a href="#">忘记密码?</a></h3>
+            <h4><a href="#">注册</a></h4>
+            <div class="clear"></div>
+        </div>
+    </form>
+
+    <div id="materialModal" class="hide">
+        <div id="materialModalCentered">
+            <div id="materialModalContent">
+                <div id="materialModalTitle">
+                    This is the title
+                </div>
+                <div id="materialModalText">
+                    This is the content<br/>
+                </div>
+                <div id="materialModalButtons">
+                    <div id="materialModalButtonOK" class="materialModalButton">
+                        确认
+                    </div>
+                    <div id="materialModalButtonCANCEL" class="materialModalButton">
+                        取消
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    seajs.use('./resource/front/js/modules/login.js', function (exports) {
+        exports.init();
+    });
+</script>
+</body>
+</html>
