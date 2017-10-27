@@ -1,5 +1,8 @@
 body {
-    background: url(../img/login_bg.jpg) fixed no-repeat 0px 0px;
+    background: url(../img/login_bg.jpg) no-repeat fixed 0px 0px;
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
 }
 
 .form-signin {
@@ -26,7 +29,7 @@ body {
     margin-bottom: -1px;
 }
 
-.form-signin input[id="login-verify-code"] {
+.input-group {
     margin-bottom: 10px;
 }
 
