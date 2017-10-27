@@ -16,6 +16,7 @@ import java.util.Properties;
  */
 @Configuration
 public class KaptchaConfig {
+
     @Value("${kaptcha.border}")
     private String border;
     @Value("${kaptcha.border.color}")

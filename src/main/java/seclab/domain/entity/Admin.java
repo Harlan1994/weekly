@@ -1,38 +1,35 @@
 package seclab.domain.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 /**
  * User: Harlan1994
- * Date: 2017/9/16
- * Time: 17:51
- * Description: 管理员实体类
+ * Date: 2017/9/28
+ * Time: 10:45
+ * Description:
  */
 @Table(name = "tb_admin")
 @Data
 @Entity
+@NoArgsConstructor
 public class Admin {
+
     /**
-     * 管理员id
+     * 用户唯一id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", length = 32)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * 用户名
-     */
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true, length = 35)
     private String username;
 
-    /**
-     * 密码
-     */
     @Column(name = "password", nullable = false)
-    @Size(min = 8, max = 32)
+    @Size(min = 6, max = 32)
     private String password;
 }

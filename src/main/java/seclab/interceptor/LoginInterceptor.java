@@ -1,10 +1,10 @@
 package seclab.interceptor;
 
-import seclab.annotation.LoginAuth;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import seclab.annotation.LoginAuth;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import static seclab.config.Constants.SESSION_KEY_PREFIX;
  * User: Harlan1994
  * Date: 2017/7/29
  * Time: 10:43
- * Description:
+ * Description: 登录拦截器，如果没有登录，将会跳转到登录界面
  */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {

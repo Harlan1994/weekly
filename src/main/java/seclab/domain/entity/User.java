@@ -1,6 +1,7 @@
 package seclab.domain.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -20,6 +21,7 @@ import java.util.List;
 })
 @Data
 @Entity
+@NoArgsConstructor
 public class User {
 
     /**
@@ -27,7 +29,7 @@ public class User {
      */
     @Id
     @Column(name = "id", length = 32)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 35)
@@ -85,14 +87,9 @@ public class User {
     @Column(name = "state", nullable = false)
     private boolean state;
 
-    @Column(name = "lastPasswordResetDate", nullable = false)
-    private Date lastPasswordResetDate;
-
-
-
     /**
-     * 选择的主题，默认白色主题（1）
-     *  0 ： 黑色主题
+     * 选择的主题，默认黑色主题（1）
+     *  0 ： 白色主题
      */
     @Column(name = "theme", nullable = false, length = 2)
     private int theme;

@@ -1,7 +1,9 @@
 package seclab.domain.repository;
 
-import seclab.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import seclab.domain.entity.User;
+
+import java.util.Optional;
 
 /**
  * User: Harlan1994
@@ -10,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Description:
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 }

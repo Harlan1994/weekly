@@ -11,7 +11,7 @@ public enum ResultCode {
     FAIL(400, "failed"), //失败
     UNAUTHORIZED(401, "unauthorized"),//未认证（签名错误）
     NOT_FOUND(404, "interface not exist"),//接口不存在
-    INTERNAL_SERVER_ERROR(500, "server failed");//服务器内部错误
+    INTERNAL_SERVER_ERROR(500, "server failed"); //服务器内部错误
 
     private Integer code;
     private String msg;

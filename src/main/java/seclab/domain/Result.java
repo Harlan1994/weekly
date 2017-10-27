@@ -1,11 +1,13 @@
 package seclab.domain;
 
 import com.alibaba.fastjson.JSON;
+import lombok.NoArgsConstructor;
 import seclab.enums.ResultCode;
 
 /**
  * 请求放回的最外层对象
  */
+@NoArgsConstructor
 public class Result<T> {
     // 结果码
     private Integer code;
