@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import seclab.domain.Result;
 import seclab.domain.entity.User;
 import seclab.domain.repository.UserRepository;
+import seclab.utils.CookieUtil;
+import seclab.utils.JwtUtil;
 import seclab.utils.MD5;
 import seclab.utils.ResultUtil;
 
@@ -16,9 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Optional;
 
-import static seclab.config.Constants.SESSION_KEY_PREFIX;
+import static seclab.config.Constants.KEY_JWT_TOKEN;
+import static seclab.config.Constants.KEY_SIGN_IN;
 
 /**
  * User: Harlan1994
@@ -52,12 +54,14 @@ public class UserService {
      * @param user
      * @return
      */
-    public Result login(User user, HttpServletRequest request) {
+    public Result login(HttpServletRequest request, HttpServletResponse response, User user) {
         // 数据库保存的密码为MD5加密过的
-        Optional<User> account = userRepository.findByUsername(user.getUsername());
+        User account = userRepository.findByUsername(user.getUsername());
         if (account != null) {
-            if (account.get().getPassword().equals(MD5.encrypt(MD5.encrypt(user.getPassword())))) {
-                request.getSession().setAttribute(SESSION_KEY_PREFIX, account.get());
+            if (account.getPassword().equals(MD5.encrypt(MD5.encrypt(user.getPassword())))) {
+//                request.getSession().setAttribute(SESSION_KEY_PREFIX, account.get());
+                String token = JwtUtil.generateToken(KEY_SIGN_IN, user.getUsername());
+                CookieUtil.create(response, KEY_JWT_TOKEN, token, false, -1, "localhost");
                 return ResultUtil.success(LOGIN_CODE_SUCCESS, "登陆成功");
             }
             return ResultUtil.error(LOGIN_CODE_UNEXIST, "密码错误");
@@ -66,9 +70,8 @@ public class UserService {
         }
     }
 
-    public Optional<User> get(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        return user;
+    public User get(String username) {
+        return userRepository.findByUsername(username);
     }
 
     /**
@@ -122,9 +125,10 @@ public class UserService {
      * 注册一个用户
      */
     public Result register(User user) {
+        user.setState(true);
         User result = userRepository.save(user);
         if (result != null) {
-            return ResultUtil.success(REGISTER_CODE_SUCCESS, "注册成功");
+            return ResultUtil.success(user);
         }
         return ResultUtil.error(REGISTER_CODE_FAILURE, "注册失败");
     }

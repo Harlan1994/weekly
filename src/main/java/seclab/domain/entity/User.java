@@ -42,7 +42,7 @@ public class User {
     /**
      * 昵称
      */
-    @Column(name = "nickname", length = 32, nullable = false)
+    @Column(name = "nickname", length = 32)
     private String nickname;
 
     /**
@@ -54,7 +54,7 @@ public class User {
     /**
      * 性别
      */
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender")
     private boolean gender;
 
     /**
@@ -66,7 +66,7 @@ public class User {
     /**
      * 届(比如 2017届，2016届)
      */
-    @Column(name = "session", nullable = false)
+    @Column(name = "session")
     private int session;
 
     /**
@@ -91,6 +91,6 @@ public class User {
      * 选择的主题，默认黑色主题（1）
      *  0 ： 白色主题
      */
-    @Column(name = "theme", nullable = false, length = 2)
+    @Column(name = "theme", length = 2)
     private int theme;
 }

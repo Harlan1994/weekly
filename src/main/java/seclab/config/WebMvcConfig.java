@@ -20,7 +20,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login")
                 .excludePathPatterns("/captcha")
-                .excludePathPatterns("/logout");
+                .excludePathPatterns("/doLogin")
+                .excludePathPatterns("/doRegister");
         super.addInterceptors(registry);
     }
 }

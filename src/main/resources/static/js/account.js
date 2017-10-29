@@ -4,17 +4,6 @@ $(document).ready(function () {
     var $btnLogin = $('#btn-login');
     var $btnRegister = $('#btn-register');
 
-    // 三个登录用的数据
-    var login_username = $('#login-username')();
-    var login_password = $('#login-password')();
-    var login_verify_code = $('#login-verify-code')();
-
-    // 四个注册用的数据
-    var register_username = $('#register-username')();
-    var register_password = $('#register-password')();
-    var register_confirm = $('#register-confirm')();
-    var register_verify_code = $('#register-verify-code')();
-
     // 监听键盘Enter事件（登录）
     document.onkeydown = function (event) {
         var e = event || window.event || arguments.callee.caller.arguments[0];
@@ -25,53 +14,61 @@ $(document).ready(function () {
 
     $btnLogin.on('click', function () {
 
-        alert(login_username.val() + ", " + login_password.val() + ", " + login_verify_code.val());
+        // 三个登录用的数据
+        var login_username = $('#login-username').val();
+        var login_password = $('#login-password').val();
+        var login_verify_code = $('#login-verify-code').val();
 
-        if (checkUsername(login_username.val()) && checkPassword(login_password.val()) && checkVerifyCode(login_verify_code.val())) {
-            $.ajax({
-                type: "post",
-                async: false,
-                datatype: "json",
-                data: {
-                    'account': login_username,
-                    'password': login_password,
-                    'verify-code': login_verify_code,
-                },
-                url: "/doLogin",
-                success: function (data) {
-                    console.log('success');
-                },
-                error: function (data) {
-                    console.log('ERROR');
-                }
-            });
-        }
+        // if (checkUsername(login_username) && checkPassword(login_password) && checkVerifyCode(login_verify_code)) {
+        $.ajax({
+            type: "post",
+            async: false,
+            datatype: "json",
+            data: {
+                'username': login_username,
+                'password': login_password,
+                'verify-code': login_verify_code
+            },
+            url: "/doLogin",
+            success: function (data) {
+                console.log(data);
+                console.log('success');
+            },
+            error: function (data) {
+                console.log('ERROR');
+            }
+        });
+        // }
     });
 
     $btnRegister.on('click', function () {
-        if (checkUsername(register_username.val())
-            && checkPassword(register_password.val())
-            && confirmPassword(register_password.val(), register_confirm.val())
-            && checkVerifyCode(register_verify_code.val())) {
-            $.ajax({
-                type: "post",
-                async: false,
-                datatype: "json",
-                data: {
-                    'account': register_username.val(),
-                    'password': register_password.val(),
-                    'confirm': register_confirm.val(),
-                    'verify-code': $('#check-code').val(),
-                },
-                url: "/doRegister",
-                success: function (data) {
-                    console.log('success');
-                },
-                error: function (data) {
-                    console.log('ERROR');
-                }
-            });
-        }
+
+        // 四个注册用的数据
+        var register_username = $('#register-username').val();
+        var register_password = $('#register-password').val();
+        var register_confirm = $('#register-confirm').val();
+        var register_verify_code = $('#register-verify-code').val();
+
+        $.ajax({
+            type: "post",
+            async: false,
+            datatype: "json",
+            data: {
+                'username': register_username,
+                'password': register_password,
+                'confirm': register_confirm,
+                'verifyCode': register_verify_code
+            },
+            url: "/doRegister",
+            success: function (data) {
+                console.log(data);
+                console.log('success');
+            },
+            error: function (data) {
+                console.log(data);
+                console.log('ERROR');
+            }
+        });
     });
 });
 

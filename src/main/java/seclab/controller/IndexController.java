@@ -1,14 +1,16 @@
 package seclab.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import seclab.annotation.LoginAuth;
 import seclab.domain.Result;
 import seclab.domain.entity.User;
 import seclab.service.UserService;
+import seclab.utils.CookieUtil;
+import seclab.utils.JwtUtil;
 import seclab.utils.RandomUtil;
 import seclab.utils.ResultUtil;
 
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static seclab.config.Constants.SESSION_KEY_PREFIX;
+import static seclab.config.Constants.KEY_JWT_TOKEN;
 
 /**
  * User: Harlan1994
@@ -24,7 +26,7 @@ import static seclab.config.Constants.SESSION_KEY_PREFIX;
  * Time: 15:49
  * Description:
  */
-@LoginAuth
+//@LoginAuth
 @Controller
 public class IndexController {
 
@@ -37,10 +39,10 @@ public class IndexController {
      * @param model
      * @return
      */
-    @GetMapping(value = "/", produces = "text/html; charset=UTF-8")
+    @GetMapping(value = "/")
     public String index(Model model) {
         model.addAttribute(RandomUtil.getRandomString(6));
-        return "front/index.html";
+        return "pages/front/index.html";
     }
 
     /**
@@ -48,7 +50,7 @@ public class IndexController {
      *
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.GET, produces = "text/html; charset=UTF-8")
+    @GetMapping(value = "/login")
     public String login(Model model) {
 //        String randomString = RandomUtil.getRandomString(6);
 //        model.addAttribute("randomString", randomString);
@@ -63,17 +65,21 @@ public class IndexController {
      * @param bindingResult
      * @return
      */
-    @PostMapping(value = "/doLogin")
+    @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     public @ResponseBody
-    Result doLogin(HttpServletRequest request, @Valid User user, BindingResult bindingResult) {
-
-        System.out.println("----running doLogin----");
-
+    Result doLogin(HttpServletRequest request,
+                   HttpServletResponse response,
+                   @Valid User user,
+                   @RequestParam String verifyCode,
+                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(-3, bindingResult.getFieldError().getDefaultMessage());
         }
 
-        return userService.login(user, request);
+        if(!StringUtils.isEmpty(verifyCode) || verifyCode.length() != 4){
+            return ResultUtil.error(-4, "验证码错误!");
+        }
+        return userService.login(request, response, user);
     }
 
     /**
@@ -82,16 +88,19 @@ public class IndexController {
      *
      * @param user
      * @param bindingResult
-     * @param randomString
      * @return
      */
     @PostMapping(value = "/doRegister")
     public @ResponseBody
-    Result doRegister(HttpServletRequest request, @Valid User user, BindingResult bindingResult, @RequestParam String randomString) {
+    Result doRegister(HttpServletRequest request,
+                      HttpServletResponse response,
+                      @Valid User user,
+                      @RequestParam String verifyCode,
+                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(-3, bindingResult.getFieldError().getDefaultMessage());
         }
-        return userService.login(user, request);
+        return userService.register(user);
     }
 
     /**
@@ -101,8 +110,10 @@ public class IndexController {
      * @return
      */
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        request.getSession().removeAttribute(SESSION_KEY_PREFIX);
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+//        request.getSession().removeAttribute(SESSION_KEY_PREFIX);
+        JwtUtil.invalidateRelatedTokens(request);
+        CookieUtil.clear(response, KEY_JWT_TOKEN);
         return "redirect:/login";
     }
 
